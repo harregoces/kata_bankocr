@@ -23,7 +23,7 @@ class FileHandler:
         return os.path.join(self.root_folder, self.folder)
 
     def read_file(self):
-        content = ''
+        content = []
         f = open(self.get_content_file_name(), "r")
         if f.mode == 'r':
             content = f.read()
