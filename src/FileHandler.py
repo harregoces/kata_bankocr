@@ -11,7 +11,7 @@ class FileHandler:
     filename = ''
 
     def write_in_file(self, message):
-        f = open(self.get_content_file_name(), "w+")
+        f = open(self.get_content_file_name(), "a+")
         result = f.write(message)
         f.close()
         return result
