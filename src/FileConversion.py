@@ -39,34 +39,25 @@ class FileConversion:
             number_in_line = []
             for n in range(0, 3*9, 3):
                 number = []
-                if len(split_text[line]) == 0:
-                    split_text[line] = " "*29
-                if len(split_text[line + 1]) == 0:
-                    split_text[line + 1] = " "*27
-                if len(split_text[line + 2]) == 0:
-                    split_text[line + 2] = " "*27
 
-                if len(split_text[line][n].strip()) > 0:
-                    number.append((0, 0))
-                if len(split_text[line][n + 1].strip()) > 0:
-                    number.append((0, 1))
-                if len(split_text[line][n + 2].strip()) > 0:
-                    number.append((0, 2))
-
-                if len(split_text[line + 1][n].strip()) > 0:
-                    number.append((1, 0))
-                if len(split_text[line + 1][n + 1].strip()) > 0:
-                    number.append((1, 1))
-                if len(split_text[line + 1][n + 2].strip()) > 0:
-                    number.append((1, 2))
-
-                if len(split_text[line + 2][n].strip()) > 0:
-                    number.append((2, 0))
-                if len(split_text[line + 2][n + 1].strip()) > 0:
-                    number.append((2, 1))
-                if len(split_text[line + 2][n + 2].strip()) > 0:
-                    number.append((2, 2))
+                for pos in range(3):
+                    for pos2 in range(3):
+                        result = self.set_position(split_text, line + pos, n + pos2, pos, pos2)
+                        if result:
+                            number.append(result)
 
                 number_in_line.append(self.switch_number(hash(tuple(number))))
             number_in_text.append("".join(map(str, number_in_line)))
         return number_in_text
+
+    def fill_text(self, split_text, index):
+        if len(split_text[index]) == 0:
+            split_text[index] = " " * 29
+        return split_text[index]
+
+    def set_position(self, split_text, index, index2, pos, pos2):
+        try:
+            if len(split_text[index][index2].strip()) > 0:
+                return tuple((pos, pos2))
+        except IndexError:
+            return None
