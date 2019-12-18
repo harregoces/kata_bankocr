@@ -30,7 +30,7 @@ class FileConversion:
             self.number_8: 8,
             self.number_9: 9,
         }
-        return switcher.get(arg, "Invalid Number")
+        return switcher.get(arg, "?")
 
     def text_to_number(self, text):
         split_text = text.splitlines()
@@ -67,6 +67,6 @@ class FileConversion:
                 if len(split_text[line + 2][n + 2].strip()) > 0:
                     number.append((2, 2))
 
-                number_in_line.append(int(self.switch_number(hash(tuple(number)))))
-            number_in_text.append(number_in_line)
+                number_in_line.append(self.switch_number(hash(tuple(number))))
+            number_in_text.append("".join(map(str, number_in_line)))
         return number_in_text
