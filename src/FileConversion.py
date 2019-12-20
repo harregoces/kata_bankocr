@@ -50,7 +50,6 @@ class FileConversion:
             return_list.append(number)
         return return_list
 
-
     def split_text_in_list(self, text):
         text = text.splitlines()
         list_return = []
