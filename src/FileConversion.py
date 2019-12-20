@@ -1,5 +1,7 @@
 import string
-
+import sys
+sys.path.append("../src/")
+import ValidateNumber
 
 class FileConversion:
 
@@ -45,7 +47,6 @@ class FileConversion:
             for n in matrix:
                 number.append(self.switch_number(n))
             number = "".join(map(str, number))
-            number = self.fix_text_to_number(number, matrix)
             return_list.append(number)
         return return_list
 
@@ -82,8 +83,8 @@ class FileConversion:
         return element
 
     def fix_text_to_number(self, number, matrix):
+        posibilities = {}
         for index in range(len(number)):
-            posibilities = []
             for element_in_matrix in matrix[index]:
 
                 for element_in_list in range(len(element_in_matrix)):
@@ -94,26 +95,41 @@ class FileConversion:
                         element_in_matrix[element_in_list] = 0
                         i = self.switch_number(matrix[index])
                         if str(i).isdigit():
-                            posibilities.append([index, i])
+                            if index in posibilities.keys():
+                                posibilities[index].append(i)
+                            else:
+                                posibilities[index] = [i]
 
                     # change the number to 1
                     if reserved != 1:
                         element_in_matrix[element_in_list] = 1
                         i = self.switch_number(matrix[index])
                         if str(i).isdigit():
-                            posibilities.append([index, i])
+                            if index in posibilities.keys():
+                                posibilities[index].append(i)
+                            else:
+                                posibilities[index] = [i]
 
                     # change the number to 2
                     if reserved != 2:
                         element_in_matrix[element_in_list] = 2
                         i = self.switch_number(matrix[index])
                         if str(i).isdigit():
-                            posibilities.append([index, i])
+                            if index in posibilities.keys():
+                                posibilities[index].append(i)
+                            else:
+                                posibilities[index] = [i]
 
                     # return the number to previous value
                     element_in_matrix[element_in_list] = reserved
 
-            print posibilities
+        print matrix
+        print posibilities
+        print number
+        reserved_number = number
+        for n in [n for n in enumerate(number) if n[1] == '?']:
+            print n
+
 
         # return a list of posibilities for each number
         return number

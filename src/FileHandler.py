@@ -24,8 +24,11 @@ class FileHandler:
 
     def read_file(self):
         content = []
-        f = open(self.get_content_file_name(), "r")
-        if f.mode == 'r':
+        try:
+            f = open(self.get_content_file_name(), "r+")
+        except:
+            raise Exception("File not found: {0}".format(self.filename))
+        if f.mode == 'r+':
             content = f.read()
         f.close()
         return content
