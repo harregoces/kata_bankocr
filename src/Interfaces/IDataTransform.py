@@ -10,5 +10,5 @@ class IDataTransform:
         """The data source interface"""
 
     @abstractmethod
-    def get_posibilites(self, content):
+    def get_possibilities(self, content):
         """The get posibilities interface"""

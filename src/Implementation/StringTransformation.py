@@ -1,8 +1,11 @@
 from ..Interfaces.IDataTransform import IDataTransform
+from copy import copy
+from src.Factory.ValidatorFactory import ValidatorFactory
 
 
 class StringTransformation(IDataTransform):
 
+    __validator_data = ValidatorFactory.get_validator("Mod11")
     __number_0 = [[0, 2, 0], [1, 0, 1], [1, 2, 1]]
     __number_1 = [[0, 0, 0], [0, 0, 1], [0, 0, 1]]
     __number_2 = [[0, 2, 0], [0, 2, 1], [1, 2, 0]]
@@ -77,12 +80,12 @@ class StringTransformation(IDataTransform):
                         element[i] = 1
                     if element[i] == "_":
                         element[i] = 2
-        return element
+        return matrix
 
     def transform_data(self, data):
         return self.__text_to_number(data)
 
-    def get_posibilites(self, content):
+    def get_possibilities(self, content):
         content_split = self.__split_text_in_list(content)
         return_list = {}
         for element in content_split:
@@ -97,9 +100,10 @@ class StringTransformation(IDataTransform):
         return return_list
 
     def __fix_text_to_number(self, number, matrix):
-        possibilities = {}
+        validator_data = ValidatorFactory.get_validator("Mod11")
+        possibilities = []
         if number.count("?") > 1:
-            return
+            return []
 
         if number.count("?") == 1:
             index = number.find("?")
@@ -111,30 +115,27 @@ class StringTransformation(IDataTransform):
                         element_in_matrix[element_in_list] = 0
                         i = self.__switch_number(matrix[index])
                         if str(i).isdigit():
-                            if index in possibilities.keys():
-                                possibilities[index].append(i)
-                            else:
-                                possibilities[index] = [i]
+                            new_number = number[:index] + str(i) + number[index + 1:]
+                            if validator_data.check_ill_err(new_number) == '':
+                                possibilities.append(new_number)
 
                     # change the number to 1
                     if reserved != 1:
                         element_in_matrix[element_in_list] = 1
                         i = self.__switch_number(matrix[index])
                         if str(i).isdigit():
-                            if index in possibilities.keys():
-                                possibilities[index].append(i)
-                            else:
-                                possibilities[index] = [i]
+                            new_number = number[:index] + str(i) + number[index + 1:]
+                            if validator_data.check_ill_err(new_number) == '':
+                                possibilities.append(new_number)
 
                     # change the number to 2
                     if reserved != 2:
                         element_in_matrix[element_in_list] = 2
                         i = self.__switch_number(matrix[index])
                         if str(i).isdigit():
-                            if index in possibilities.keys():
-                                possibilities[index].append(i)
-                            else:
-                                possibilities[index] = [i]
+                            new_number = number[:index] + str(i) + number[index + 1:]
+                            if validator_data.check_ill_err(new_number) == '':
+                                possibilities.append(new_number)
 
                     # return the number to previous value
                     element_in_matrix[element_in_list] = reserved
@@ -150,31 +151,66 @@ class StringTransformation(IDataTransform):
                         element_in_matrix[element_in_list] = 0
                         i = self.__switch_number(matrix[index])
                         if str(i).isdigit():
-                            if index in possibilities.keys():
-                                possibilities[index].append(i)
-                            else:
-                                possibilities[index] = [i]
+                            new_number = number[:index] + str(i) + number[index + 1:]
+                            if validator_data.check_ill_err(new_number) == '':
+                                possibilities.append(new_number)
 
                     # change the number to 1
                     if reserved != 1:
                         element_in_matrix[element_in_list] = 1
                         i = self.__switch_number(matrix[index])
                         if str(i).isdigit():
-                            if index in possibilities.keys():
-                                possibilities[index].append(i)
-                            else:
-                                possibilities[index] = [i]
+                            new_number = number[:index] + str(i) + number[index + 1:]
+                            if validator_data.check_ill_err(new_number) == '':
+                                possibilities.append(new_number)
 
                     # change the number to 2
                     if reserved != 2:
                         element_in_matrix[element_in_list] = 2
                         i = self.__switch_number(matrix[index])
                         if str(i).isdigit():
-                            if index in possibilities.keys():
-                                possibilities[index].append(i)
-                            else:
-                                possibilities[index] = [i]
+                            new_number = number[:index] + str(i) + number[index + 1:]
+                            if validator_data.check_ill_err(new_number) == '':
+                                possibilities.append(new_number)
 
                     # return the number to previous value
                     element_in_matrix[element_in_list] = reserved
+
+        return possibilities
+
+    def __run_elements_in_matrix(self, matrix, index, number):
+        possibilities = []
+        for element_in_matrix in matrix[index]:
+            for element_in_list in range(len(element_in_matrix)):
+                reserved = element_in_matrix[element_in_list]
+
+                # change the number to 0 if reserved is different
+                if reserved != 0:
+                    element_in_matrix[element_in_list] = 0
+                    i = self.__switch_number(matrix[index])
+                    if str(i).isdigit():
+                        new_number = number[:index] + str(i) + number[index + 1:]
+                        if self.__validator_data.check_ill_err(new_number) == '':
+                            possibilities.append(new_number)
+
+                # change the number to 1
+                if reserved != 1:
+                    element_in_matrix[element_in_list] = 1
+                    i = self.__switch_number(matrix[index])
+                    if str(i).isdigit():
+                        new_number = number[:index] + str(i) + number[index + 1:]
+                        if self.__validator_data.check_ill_err(new_number) == '':
+                            possibilities.append(new_number)
+
+                # change the number to 2
+                if reserved != 2:
+                    element_in_matrix[element_in_list] = 2
+                    i = self.__switch_number(matrix[index])
+                    if str(i).isdigit():
+                        new_number = number[:index] + str(i) + number[index + 1:]
+                        if self.__validator_data.check_ill_err(new_number) == '':
+                            possibilities.append(new_number)
+
+                # return the number to previous value
+                element_in_matrix[element_in_list] = reserved
         return possibilities

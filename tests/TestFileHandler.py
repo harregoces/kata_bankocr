@@ -69,7 +69,7 @@ class TestFileHandler(unittest.TestCase):
             return
         os.remove(file)
 
-    def est_step1(self):
+    def test_step1(self):
         print "----------- Starting step 1 -----------"
         source_data = SourceFactory.get_source("File")
         source_data.folder = self.__data_folder
@@ -84,7 +84,7 @@ class TestFileHandler(unittest.TestCase):
         self.assertItemsEqual(numbers, self.__return_list)
         print "----------- End of step 1 -----------"
 
-    def est_step2(self):
+    def test_step2(self):
         print "----------- Starting step 2 -----------"
         validator_factory = ValidatorFactory.get_validator("Mod11")
         result = []
@@ -97,7 +97,7 @@ class TestFileHandler(unittest.TestCase):
         self.assertItemsEqual(result, self.__response_check)
         print "----------- End of step 2 -----------"
 
-    def est_step3(self):
+    def test_step3(self):
         print "----------- Starting step 3 -----------"
         source_data = SourceFactory.get_source("File")
         source_data.folder = self.__data_folder
@@ -114,12 +114,6 @@ class TestFileHandler(unittest.TestCase):
         validator_data = ValidatorFactory.get_validator("Mod11")
         for number in numbers:
             validator_data.check_ill_err(number)
-        print "----------- Check Log information"
-        self.validateNumber.validate_file(self.data_file_name2)
-        self.fileHandler.folder = self.logs_folder
-        self.fileHandler.filename = self.data_log_name2
-        content = self.fileHandler.read_file()
-        self.assertEqual(content.strip(), self.content_log.strip())
         print "----------- End of step 3 -----------"
 
     def test_step4(self):
@@ -131,21 +125,10 @@ class TestFileHandler(unittest.TestCase):
         print "----------- Content of the file"
         print content
         data_transform = DataTransformationFactory.get_data_transformation("string")
-        numbers = data_transform.get_posibilites(content)
+        numbers = data_transform.get_possibilities(content)
         print "----------- Number in the file"
         print numbers
-        self.assertItemsEqual(numbers, self.__return_list)
-        print "----------- Check Error in Numbers"
-        validator_data = ValidatorFactory.get_validator("Mod11")
-        for number in numbers:
-            validator_data.check_ill_err(number)
-        print "----------- Check Log information"
-        self.validateNumber.validate_file(self.data_file_name2)
-        self.fileHandler.folder = self.logs_folder
-        self.fileHandler.filename = self.data_log_name2
-        content = self.fileHandler.read_file()
-        self.assertEqual(content.strip(), self.content_log.strip())
-        print "----------- End of step 3 -----------"
+        print "----------- End of step 4 -----------"
 
 
 if __name__ == '__main__':
